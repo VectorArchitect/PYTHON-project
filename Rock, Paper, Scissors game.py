@@ -1,28 +1,43 @@
 import random
-dic={
-    'rock':1,
-    'paper':0,
-    'scissors':-1
-}
-reverseDic={
-    1:'rock',
-    0:'paper',
-    -1:'scissors'
+
+CHOICES = ("rock", "paper", "scissors")
+WINS_OVER = {
+    "rock": "scissors",
+    "paper": "rock",
+    "scissors": "paper",
 }
 
-machine=random.choice([1,0,-1])
 
-user=input("enter your choice : ")
-user_num=dic.get(user)
+def decide_winner(user_choice, computer_choice):
+    """Return the outcome for two choices, validating both inputs."""
+    user_choice = str(user_choice).strip().lower()
+    computer_choice = str(computer_choice).strip().lower()
 
-print(f"You:{reverseDic.get(user_num)}  ;  Computer:{reverseDic.get(machine)}")
-if user_num == machine:
-    print("Draw !")
+    if user_choice not in WINS_OVER:
+        raise ValueError("Choose rock, paper, or scissors.")
+    if computer_choice not in WINS_OVER:
+        raise ValueError("Computer choice must be rock, paper, or scissors.")
 
-elif machine-user_num==1 or machine-user_num==-2:
-    print("YOU WIN !")
-elif machine-user_num==2 or machine-user_num==-1:
-    print("YOU LOSE !")
-else:
-    print("Some error occured !")
-    
+    if user_choice == computer_choice:
+        return "Draw !"
+    if WINS_OVER[user_choice] == computer_choice:
+        return "YOU WIN !"
+    return "YOU LOSE !"
+
+
+def play():
+    computer_choice = random.choice(CHOICES)
+    user_choice = input("Enter your choice (rock/paper/scissors): ")
+
+    try:
+        outcome = decide_winner(user_choice, computer_choice)
+    except ValueError:
+        print("Invalid choice. Please enter rock, paper, or scissors.")
+        return
+
+    print(f"You: {user_choice.strip().lower()} ; Computer: {computer_choice}")
+    print(outcome)
+
+
+if __name__ == "__main__":
+    play()
